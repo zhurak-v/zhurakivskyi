@@ -1,0 +1,10 @@
+services:
+  server:
+    container_name: aspnet-server
+    image: aspnet-server-image-dev:latest
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/Development.Server.Dockerfile
+    ports:
+      - "7777:7777"
+    restart: unless-stopped
