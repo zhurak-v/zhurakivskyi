@@ -1,15 +1,22 @@
 namespace Common.Config;
 
-public static class ConfigInstance
-{
-    private static readonly ConfigService _instance = ConfigService.Load($"config/.{CurrentEnvironment}.env");
+using Ports.Config;
 
-    public static T GetOrThrow<T>(string key)
+public class ConfigInstance : IConfigInstance
+{
+    private readonly ConfigService _instance;
+
+    public ConfigInstance()
     {
-        return _instance.GetOrThrow<T>(key);
+        this._instance = ConfigService.Load($"config/.{CurrentEnvironment}.env");
     }
 
-    public static string CurrentEnvironment
+    public T GetOrThrow<T>(string key)
+    {
+        return this._instance.GetOrThrow<T>(key);
+    }
+
+    public string CurrentEnvironment
     {
         get
         {
@@ -17,7 +24,7 @@ public static class ConfigInstance
         }
     }
 
-    public static bool IsProduction
+    public bool IsProduction
     {
         get
         {

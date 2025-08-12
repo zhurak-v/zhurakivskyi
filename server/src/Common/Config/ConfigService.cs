@@ -2,8 +2,8 @@ namespace Common.Config;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Common.Config.Interface;
 using DotNetEnv;
+using Ports.Config;
 
 internal class ConfigService : IConfigService
 {
@@ -44,9 +44,7 @@ internal class ConfigService : IConfigService
     {
         this._envPath = envPath;
         if (File.Exists(envPath))
-        {
             Env.Load(envPath);
-        }
     }
 
     private T Cast<T>(string value, string key)
@@ -58,17 +56,17 @@ internal class ConfigService : IConfigService
             if (targetType == typeof(bool))
             {
                 var lowered = value.ToLowerInvariant();
+
                 if (lowered is "true" or "1" or "yes" or "on")
                     return (T)(object)true;
+
                 if (lowered is "false" or "0" or "no" or "off")
                     return (T)(object)false;
 
                 ThrowCastError(key, targetType, value);
             }
             else
-            {
                 return (T)Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture)!;
-            }
 
             ThrowUnsupportedType(key, targetType);
         }
@@ -83,9 +81,8 @@ internal class ConfigService : IConfigService
     public static ConfigService Load(string envPath)
     {
         if (_instance is null)
-        {
             _instance = new ConfigService(envPath);
-        }
+
         return _instance;
     }
 
@@ -93,9 +90,7 @@ internal class ConfigService : IConfigService
     {
         var value = Environment.GetEnvironmentVariable(key);
         if (value is null)
-        {
             ThrowVariableNotSet(key);
-        }
 
         return this.Cast<T>(value, key);
     }

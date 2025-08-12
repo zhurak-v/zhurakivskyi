@@ -1,38 +1,33 @@
 namespace Common.Config;
 
-using Common.Config.Interface;
+using Ports.Config;
 
 internal class ConfigException : Exception, IConfigException
 {
-    private readonly int _code;
-    private readonly string _message;
+    public int Code { get; }
+
+    public override string Message
+    {
+        get
+        {
+            return base.Message;
+        }
+    }
 
     public ConfigException(int code, string message)
         : base(message)
     {
-        this._code = code;
-        this._message = message;
+        Code = code;
     }
 
     public ConfigException(int code, string message, Exception innerException)
         : base(message, innerException)
     {
-        this._code = code;
-        this._message = message;
-    }
-
-    public int GetCode()
-    {
-        return this._code;
-    }
-
-    public string GetMessage()
-    {
-        return this._message;
+        Code = code;
     }
 
     public override string ToString()
     {
-        return $"ConfigException: Code={this._code}, Message={this._message}";
+        return $"ConfigException: Code={Code}, Message={Message}";
     }
 }

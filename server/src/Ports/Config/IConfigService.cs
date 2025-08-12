@@ -1,4 +1,4 @@
-namespace Common.Config.Interface;
+namespace Ports.Config;
 
 public interface IConfigService
 {
