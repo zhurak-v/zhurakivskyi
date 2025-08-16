@@ -1,18 +1,17 @@
-namespace Infrastructure.Data.Repository;
+namespace Common.Data.Repository;
 
 using System.Linq.Expressions;
-using Common.Data.Repository;
 using Common.Entities;
-using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-public class BaseRepository<E> : IBaseRepository<E>
+public class BaseRepository<E, C> : IBaseRepository<E>
     where E : BaseEntity
+    where C : DbContext
 {
-    protected readonly AppDbContext _context;
+    protected readonly C _context;
     protected readonly DbSet<E> _dbSet;
 
-    public BaseRepository(AppDbContext context)
+    public BaseRepository(C context)
     {
         this._context = context;
         this._dbSet = this._context.Set<E>();
@@ -73,5 +72,10 @@ public class BaseRepository<E> : IBaseRepository<E>
     public async Task<bool> ExistsAsync(Expression<Func<E, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await this._dbSet.AnyAsync(predicate, cancellationToken);
+    }
+
+    public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
+    {
+        return await this._context.SaveChangesAsync(cancellationToken);
     }
 }

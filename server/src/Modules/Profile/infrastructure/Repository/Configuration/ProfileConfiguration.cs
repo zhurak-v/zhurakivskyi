@@ -1,9 +1,8 @@
-namespace Infrastructure.Data.Configuration;
+namespace Profile.Infrastructure.Repository.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Profile.Core.Entities;
-using User.Core.Entities;
 
 public class ProfileConfiguration : IEntityTypeConfiguration<ProfileEntity>
 {
@@ -32,10 +31,5 @@ public class ProfileConfiguration : IEntityTypeConfiguration<ProfileEntity>
 
               builder.HasIndex(p => p.UserId)
                      .IsUnique();
-
-              builder.HasOne<UserEntity>()
-                     .WithOne()
-                     .HasForeignKey<ProfileEntity>(p => p.UserId)
-                     .OnDelete(DeleteBehavior.Cascade);
        }
 }

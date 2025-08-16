@@ -14,4 +14,5 @@ public interface IBaseRepository<E> where E : BaseEntity
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     Task<int> CountAsync(Expression<Func<E, bool>>? predicate = null, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Expression<Func<E, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<int> CommitAsync(CancellationToken cancellationToken = default);
 }

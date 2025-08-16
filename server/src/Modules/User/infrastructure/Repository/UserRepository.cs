@@ -1,14 +1,15 @@
-namespace Infrastructure.Data.Repository;
+namespace User.Infrastructure.Repository;
 
-using Infrastructure.Data.Context;
+using Common.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using User.Core.Entities;
 using User.Core.Enums;
 using User.Core.Ports.Repository;
+using User.Infrastructure.Repository.Context;
 
-public class UserRepository : BaseRepository<UserEntity>, IUserRepository
+public class UserRepository : BaseRepository<UserEntity, UserDbContext>, IUserRepository
 {
-    public UserRepository(AppDbContext context) : base(context) { }
+    public UserRepository(UserDbContext context) : base(context) { }
 
     public async Task<UserEntity?> FindByEmail(string email, CancellationToken cancellationToken = default)
     {

@@ -1,13 +1,14 @@
-namespace Infrastructure.Data.Repository;
+namespace Profile.Infrastructure.Repository;
 
-using Infrastructure.Data.Context;
+using Common.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Profile.Core.Entities;
 using Profile.Core.Ports.Repository;
+using Profile.Infrastructure.Repository.Context;
 
-public class ProfileRepository : BaseRepository<ProfileEntity>, IProfileRepository
+public class ProfileRepository : BaseRepository<ProfileEntity, ProfileDbContext>, IProfileRepository
 {
-    public ProfileRepository(AppDbContext context) : base(context) { }
+    public ProfileRepository(ProfileDbContext context) : base(context) { }
 
     public async Task<IEnumerable<ProfileEntity>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default)
     {

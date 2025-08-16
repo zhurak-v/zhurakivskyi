@@ -1,23 +1,19 @@
-namespace Infrastructure.Data.Context;
+namespace Profile.Infrastructure.Repository.Context;
 
-using Infrastructure.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Profile.Core.Entities;
-using User.Core.Entities;
+using Profile.Infrastructure.Repository.Configuration;
 
-public class AppDbContext : DbContext
+public class ProfileDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
+    public ProfileDbContext(DbContextOptions<ProfileDbContext> options)
         : base(options) { }
 
-    public DbSet<UserEntity> Users { get; set; }
     public DbSet<ProfileEntity> Profiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new ProfileConfiguration());
-
         base.OnModelCreating(modelBuilder);
     }
 }

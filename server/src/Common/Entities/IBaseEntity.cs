@@ -2,9 +2,9 @@ namespace Common.Entities;
 
 public interface IBaseEntity
 {
-    Guid Id { get; }
-    DateTime CreatedAt { get; }
-    DateTime? UpdatedAt { get; }
+    public Guid Id { get; }
+    public DateTime CreatedAt { get; }
+    public DateTime? UpdatedAt { get; }
 
     void SetUpdatedAt();
 }
