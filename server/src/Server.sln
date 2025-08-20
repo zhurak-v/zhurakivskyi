@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profile", "Modules\Profile\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "Modules\User\User.csproj", "{2D9EE951-9BB9-4D71-B100-1AEF36CE1DAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B94FD2C5-1A9B-421B-A32A-6F02CE4AD4E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "Modules\Auth\Auth.csproj", "{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,9 +44,14 @@ Global
 		{B94FD2C5-1A9B-421B-A32A-6F02CE4AD4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B94FD2C5-1A9B-421B-A32A-6F02CE4AD4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B94FD2C5-1A9B-421B-A32A-6F02CE4AD4E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8C1CD077-E897-490F-857C-45F5FD604A61} = {AEBC6A38-9904-4099-979B-394E4D29A1FE}
 		{2D9EE951-9BB9-4D71-B100-1AEF36CE1DAD} = {AEBC6A38-9904-4099-979B-394E4D29A1FE}
+		{A2A7AFDC-2B81-495A-9C4D-2DDE01205D5F} = {AEBC6A38-9904-4099-979B-394E4D29A1FE}
 	EndGlobalSection
 EndGlobal

@@ -5,6 +5,6 @@ using Profile.Core.Entities;
 
 public interface IProfileRepository : IBaseRepository<ProfileEntity>
 {
-    public Task<IEnumerable<ProfileEntity>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default);
-    public Task<ProfileEntity?> SearchByNickNameAsync(string NickName, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ProfileEntity>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default);
+    Task<ProfileEntity?> SearchByNickNameAsync(string nickName, CancellationToken cancellationToken = default);
 }

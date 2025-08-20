@@ -13,13 +13,13 @@ public class ProfileRepository : BaseRepository<ProfileEntity, ProfileDbContext>
     public async Task<IEnumerable<ProfileEntity>> SearchByNameAsync(string searchTerm, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
-            return Enumerable.Empty<ProfileEntity>();
+            return Array.Empty<ProfileEntity>();
 
         searchTerm = searchTerm.ToLower();
 
-        return await _dbSet
-            .Where(p => (p.FirstName != null && p.FirstName.ToLower().Contains(searchTerm)) ||
-                        (p.LastName != null && p.LastName.ToLower().Contains(searchTerm)))
+        return await this._dbSet
+            .Where(p => (p.FirstName != null && EF.Functions.Like(p.FirstName, $"%{searchTerm}%")) ||
+                        (p.LastName != null && EF.Functions.Like(p.LastName, $"%{searchTerm}%")))
             .ToListAsync(cancellationToken);
     }
 
@@ -28,7 +28,10 @@ public class ProfileRepository : BaseRepository<ProfileEntity, ProfileDbContext>
         if (string.IsNullOrWhiteSpace(nickName))
             return null;
 
-        return await _dbSet.FirstOrDefaultAsync(p => p.NickName != null && p.NickName.ToLower() == nickName.ToLower(), cancellationToken);
+        return await this._dbSet.FirstOrDefaultAsync(
+            p => p.NickName != null && 
+                 string.Equals(p.NickName, nickName, StringComparison.OrdinalIgnoreCase),
+            cancellationToken);
     }
 
 
