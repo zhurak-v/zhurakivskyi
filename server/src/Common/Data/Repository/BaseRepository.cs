@@ -8,10 +8,10 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
     where TEntity : BaseEntity
     where TContext : DbContext
 {
-    protected readonly TContext _context;
+    private readonly TContext _context;
     protected readonly DbSet<TEntity> _dbSet;
 
-    public BaseRepository(TContext context)
+    protected BaseRepository(TContext context)
     {
         this._context = context;
         this._dbSet = this._context.Set<TEntity>();
@@ -45,6 +45,7 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
     public async Task UpdateAsync(Guid id, Action<TEntity> updateAction, CancellationToken cancellationToken = default)
     {
         var entity = await FindByIdAsync(id, cancellationToken);
+        
         if (entity == null)
             throw new InvalidOperationException($"Entity {typeof(TEntity).Name} with id {id} not found.");
 
@@ -55,6 +56,7 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await FindByIdAsync(id, cancellationToken);
+        
         if (entity == null)
             throw new InvalidOperationException($"Entity {typeof(TEntity).Name} with id {id} not found.");
 
@@ -65,8 +67,8 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
     {
         if (predicate == null)
             return await this._dbSet.CountAsync(cancellationToken);
-
-        return await this._dbSet.CountAsync(predicate, cancellationToken);
+        else
+            return await this._dbSet.CountAsync(predicate, cancellationToken);
     }
 
     public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)

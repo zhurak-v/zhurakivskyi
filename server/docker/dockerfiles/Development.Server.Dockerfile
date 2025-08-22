@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY --from=build /app/out .
 
-COPY configs ./configs
+COPY config ./config
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=http://+:7777
