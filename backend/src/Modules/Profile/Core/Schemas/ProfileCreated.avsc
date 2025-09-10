@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "ProfileCreated",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "firstName", "type": ["null", "string"], "default": null },
+    { "name": "lastName", "type": ["null", "string"], "default": null },
+    { "name": "avatar", "type": ["null", "string"], "default": null },
+    { "name": "phoneNumber", "type": ["null", "string"], "default": null },
+    { "name": "nickName", "type": ["null", "string"], "default": null },
+    { "name": "userId", "type": "string"}
+  ]
+}

@@ -1,16 +1,19 @@
-# ASP.NET Core - Server
 # Build and Publisher output
-server/build
-server/publisher
+backend/**/bin/
+backend/**/obj/
+backend/publisher
 
-# dotenv environment files
+# Dotenv environment files
 **/*.env
 !**/*.Example.env
 
 # IDE
-.vscode/
-*.vs/
-.idea/
+**/.vscode
+**/.vs
+**/.idea
 
 # Logs
 **/*.log
+
+# Docker data
+backend/docker/data

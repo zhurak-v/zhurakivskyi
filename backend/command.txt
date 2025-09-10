@@ -1,0 +1,125 @@
+docker exec -it postgres psql -U postgres
+
+CREATE DATABASE auth_db;
+CREATE DATABASE user_db;
+CREATE DATABASE profile_db;
+
+
+docker exec -it aspnet-server bash
+
+cd ..
+
+dotnet ef migrations add InitAuth \
+  --project src/Modules/Auth/Auth.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context AuthDbContext \
+  --output-dir src/Modules/Auth/Infrastructure/Migrations
+
+dotnet ef database update \
+  --project src/Modules/Auth/Auth.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context AuthDbContext
+
+dotnet ef migrations add InitUser \
+  --project src/Modules/User/User.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context UserDbContext \
+  --output-dir src/Modules/User/Infrastructure/Migrations
+
+dotnet ef database update \
+  --project src/Modules/User/User.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context UserDbContext
+  
+dotnet ef migrations add InitProfile \
+  --project src/Modules/Profile/Profile.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context ProfileDbContext \
+  --output-dir src/Modules/Profile/Infrastructure/Migrations
+
+dotnet ef database update \
+  --project src/Modules/Profile/Profile.csproj \
+  --startup-project src/Application/Application.csproj \
+  --context ProfileDbContext
+
+
+docker exec -it postgres psql -U postgres
+
+\c auth_db;
+
+CREATE OR REPLACE FUNCTION notify_auth_outbox()
+RETURNS trigger AS $$
+BEGIN
+  PERFORM pg_notify('auth_outbox_channel', NEW."Id"::text);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS event_inserted_notify ON "EventEntities";
+
+CREATE TRIGGER event_inserted_notify
+AFTER INSERT ON "EventEntities"
+FOR EACH ROW
+EXECUTE FUNCTION notify_auth_outbox();
+
+\c user_db;
+
+CREATE OR REPLACE FUNCTION notify_user_outbox()
+RETURNS trigger AS $$
+BEGIN
+  PERFORM pg_notify('user_outbox_channel', NEW."Id"::text);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS event_inserted_notify ON "EventEntities";
+
+CREATE TRIGGER event_inserted_notify
+AFTER INSERT ON "EventEntities"
+FOR EACH ROW
+EXECUTE FUNCTION notify_user_outbox();
+
+\c profile_db;
+
+CREATE OR REPLACE FUNCTION notify_profile_outbox()
+RETURNS trigger AS $$
+BEGIN
+  PERFORM pg_notify('profile_outbox_channel', NEW."Id"::text);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS event_inserted_notify ON "EventEntities";
+
+CREATE TRIGGER event_inserted_notify
+AFTER INSERT ON "EventEntities"
+FOR EACH ROW
+EXECUTE FUNCTION notify_profile_outbox();
+
+
+docker exec -it kafka-broker kafka-topics --create \
+  --topic auth-events --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+docker exec -it kafka-broker kafka-topics --create \
+  --topic user-events --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+  
+docker exec -it kafka-broker kafka-topics --create \
+  --topic profile-events --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+  
+  
+docker exec -it postgres psql -U postgres
+ 
+\c user_db;
+
+TRUNCATE TABLE "Users" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "EventEntities" RESTART IDENTITY CASCADE;
+
+\c auth_db;
+
+TRUNCATE TABLE "Auths" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "EventEntities" RESTART IDENTITY CASCADE;
+
+\c profile_db;
+
+TRUNCATE TABLE "Profiles" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "EventEntities" RESTART IDENTITY CASCADE;

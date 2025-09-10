@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "AuthRegistered",
+  "fields": [
+    { "name": "email", "type": "string" },
+    { "name": "password", "type": "string" }
+  ]
+}

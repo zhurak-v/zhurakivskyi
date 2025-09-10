@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "UserCreated",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "email", "type": "string" },
+    { "name": "password", "type": "string" },
+    {
+      "name": "role",
+      "type": {
+        "type": "enum",
+        "name": "UserRole",
+        "symbols": ["REGULAR", "ADMIN"]
+      }
+    },
+    { "name": "profileId", "type": ["null", "string"], "default": null }
+  ]
+}
